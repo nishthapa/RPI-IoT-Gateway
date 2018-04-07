@@ -27,17 +27,9 @@ time.sleep(2)
 
 while True:
     try:
-#        if string[0] == NRF:
-#            if True:
-#            print("Message received fromm NRF Node");
-#            topic_name = topic_name + "nrf/incoming";
-        topic_name = topic_name + "test_topic_1";
-#           print("Out received message decodes to: {}".format(string))
-#        print("Message received from NRF24L01 Node: {}".format(string)+" . . . . . . Publishing it to topic "+topic_name)
+        topic_name = topic_name + "test_topic_1"
         print("Publishing "+message+" to topic "+topic_name)
-#            print("Message received from NRF24L01 Node: {}".format(string)+" . . . . . . Publishing it to topic rpi_gateway/nrf/incoming")
         client.publish(topic_name, message, 2)
-#            client.publish("rpi_gateway/nrf/incoming", string, 1)
         client.loop(2, 10)
         topic_name = "rpi_gateway/";
         time.sleep(1)
