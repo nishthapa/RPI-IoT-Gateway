@@ -1,6 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
- 
+
+#define DEV_ADDR 2
+
 const char* ssid = "COLDSPOT";
 const char* password =  "1234567890";
 const char* mqttServer = "192.168.43.135";
@@ -8,6 +10,10 @@ const int mqttPort = 1883;
 const int QoS_LEVEL = 1;
 //const char* mqttUser = "YourMqttUser";
 //const char* mqttPassword = "YourMqttUserPassword";
+
+int DEST_ADDR;
+
+String final_msg;
  
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -65,7 +71,11 @@ void callback(char* topic_msg, byte* payload, unsigned int length)
  
 void loop()
 {
-  client.publish("rpi_gateway/esp8266", "MESSAGE FROM ESP8266", QoS_LEVEL);
+  DEST_ADDR = random(1, 5);
+  if(DEST_ADDR == DEV_ADDR)
+    DEST_ADDR = DEST_ADDR - 1;
+  final_msg = String(DEV_ADDR) + " MESSAGE FROM ESP " + String(DEST_ADDR);
+  client.publish("rpi_gateway/esp8266", (char*)final_msg.c_str() , QoS_LEVEL);
   delay(1000);
   client.loop();
 }

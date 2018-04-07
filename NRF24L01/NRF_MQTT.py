@@ -125,7 +125,7 @@ while True:
 #            topic_name = topic_name + "nrf/incoming";
             topic_name = topic_name + "nrf";
 #           print("Out received message decodes to: {}".format(string))
-            print("Message received from NRF24L01 Node: {}".format(string)+" . . . . . . Publishing it to topic "+topic_name)
+            print("NRF TX (rpi_gateway/nrf): {}".format(string))
 #            print("Message received from NRF24L01 Node: {}".format(string)+" . . . . . . Publishing it to topic rpi_gateway/nrf/incoming")
             client.publish(topic_name, string, 1)
 #            client.publish("rpi_gateway/nrf/incoming", string, 1)

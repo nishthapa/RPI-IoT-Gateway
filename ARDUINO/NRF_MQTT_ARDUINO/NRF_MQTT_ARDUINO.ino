@@ -1,7 +1,7 @@
 #include<SPI.h>
 #include<RF24.h>
 
-#define DEVICE_ADDR 1
+#define DEV_ADDR 1
 
 int DEST_ADDR;
 
@@ -33,7 +33,7 @@ void setup(void)
 void loop(void)
 {
   /**** Simulating random Dstination addresses for now ****/
-  DEST_ADDR = random(2, 10);
+  DEST_ADDR = random(2, 5);
   /****************************************************/
   
   radio.startListening();
@@ -53,7 +53,7 @@ void loop(void)
       Serial.println("Looks like they want a string!");
       
       /*************************Framing the final packet ************************************/
-      final_message = String(DEVICE_ADDR) + " NRF_TEST_PAYLOAD " + String(DEST_ADDR);
+      final_message = String(DEV_ADDR) + " MESSAGE FROM NRF " + String(DEST_ADDR);
       /**************************************************************************************/
 
       final_msg_length = final_message.length();
