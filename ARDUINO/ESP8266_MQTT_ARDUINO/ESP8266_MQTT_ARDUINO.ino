@@ -5,7 +5,7 @@
 
 const char* ssid = "COLDSPOT";
 const char* password =  "1234567890";
-const char* mqttServer = "192.168.43.135";
+const char* mqttServer = "172.16.24.72";
 const int mqttPort = 1883;
 const int QoS_LEVEL = 1;
 //const char* mqttUser = "YourMqttUser";
@@ -47,7 +47,7 @@ void setup()
     }
   }
  
-  client.publish("rpi_gateway/esp8266", "Hello from ESP8266", QoS_LEVEL);
+  client.publish("rpi_gateway/esp", "Hello from ESP8266", QoS_LEVEL);
   //client.subscribe("esp/test");
  
 }

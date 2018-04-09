@@ -39,7 +39,7 @@ client.loop_start()        #start the loop
 while Connected != True:    #Wait for connection
     time.sleep(0.1)
  
-client.subscribe([("rpi_gateway/nrf", QoS), ("rpi_gateway/esp8266", QoS), ("rpi_gateway/test_topic_1", QoS), ("rpi_gateway/test_topic_2", QoS)])
+client.subscribe([("rpi_gateway/nrf", QoS), ("rpi_gateway/esp", QoS), ("rpi_gateway/test_topic_1", QoS), ("rpi_gateway/test_topic_2", QoS)])
 time.sleep(1)
 
 try:
