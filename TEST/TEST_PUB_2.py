@@ -10,7 +10,7 @@ PORT_NUMBER = 1883
 TIMEOUT_DURATION = 60
 CONNECTED_FLAG = False
 
-DEV_ADDR = 5
+DEV_ADDR = 4
 DEST_ADDR = 0
 
 message = " MESSAGE FROM TS2 "
@@ -32,8 +32,8 @@ time.sleep(2)
 while True:
     try:
         topic_name = topic_name + "test_topic_2"
-	DEST_ADDR = random.randint(1, 5)
-	if DEST_ADDR == 5:
+	DEST_ADDR = random.randint(1, 4)
+	if DEST_ADDR == DEV_ADDR:
             DEST_ADDR = DEST_ADDR - 1
         final_msg = str(DEV_ADDR) + message + str(DEST_ADDR)
         print("TS2 TX (rpi_gateway/test_topic_2): " + final_msg)

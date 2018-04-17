@@ -2,6 +2,7 @@ import paho.mqtt.client as mqttClient
 import time
 
 received = ""
+topic_name = "rpi_gateway/mastertopic"
  
 def on_connect(client, userdata, flags, rc):
  
@@ -17,8 +18,10 @@ def on_connect(client, userdata, flags, rc):
         print("Connection failed")
  
 def on_message(client, userdata, message):
-    print ("Message received: "  + message.payload)
     received = message.payload
+    print ("Message received: "  + received)
+    client.publish(topic_name, received, 2)
+    
     
  
 Connected = False   #global variable for the state of the connection
