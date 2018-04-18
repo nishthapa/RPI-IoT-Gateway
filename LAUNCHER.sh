@@ -31,3 +31,13 @@ pushd ../MASTER_SUBS
 lxterminal -e python MASTER_SUB.py
 sleep 1
 #................................................#
+
+
+
+#......... STARTING UP PACKET ROUTER ............#
+sleep 1
+# pushd ~/Desktop/RPI_GATEWAY/PACKET_ROUTER/
+pushd ../PACKET_ROUTER
+lxterminal -e python PACKET_ROUTER.py
+sleep 1
+#................................................#

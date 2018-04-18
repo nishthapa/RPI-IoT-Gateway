@@ -9,7 +9,9 @@ GPIO.setmode(GPIO.BCM)
 nrf_pipes = [[0xE8, 0xE8, 0xF0, 0xF0, 0xE1], [0xF0, 0xF0, 0xF0, 0xF0, 0xE1]]
 
 # set up the mqtt client
-mqttc = mqtt.Client("python_pub")
+client = mqtt.Client("python_pub")
+
+#client.on_message= on_message                      #attach function to callback
 
 ##### DEVICE ADDRESSES #####
 NRF = "1"
@@ -18,11 +20,13 @@ XBEE = "3"
 
 LoRa = "5"
 
+STR = ""
 
 msg_source_address = "0"
 ############################
 
 topic_name = "rpi_gateway/"
+nrf_out_topic = "rpi_gateway/nrf_outgoing"
 
 CLIENT_NAME = "NRF_PUBLISHER"
 BROKER_ADDRESS = "localhost"
@@ -43,11 +47,11 @@ radio.enableAckPayload()
 radio.openWritingPipe(nrf_pipes[0])
 radio.openReadingPipe(1, nrf_pipes[1])
 radio.printDetails()
-message = list("GETSTRING")
+nrf_msg = list("FUCKTARD")
+#nrf_msg = list(received)
 #######################################
 
-while len(message) < 32:
-    message.append(0)
+
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -55,11 +59,13 @@ def on_connect(client, userdata, flags, rc):
         CONNECTED_FLAG = True
         print("Connection Successful! Result Code: "+str(rc))
     else:
-        print("Connection Unsuccessfull! Result Code: "+str(rc))
+        print("Connection Unsuccessful! Result Code: "+str(rc))
         client.loop_stop()
-
-#def on_disconnect(client, userdata, rc)
-#    print("Client Disconnected! Result Code: "+str(rc))
+        
+def on_message(client, userdata, message):
+    global STR
+    STR = message.payload
+    print ("Message received: "  + STR)
     
 #def on_publish(client, userdata, mid)
 #    print("In on_pub callback mid = "+str(mid))
@@ -68,27 +74,25 @@ def on_connect(client, userdata, flags, rc):
     # reconnect then subscriptions will be renewed.
     #client.subscribe("$SYS/#")
     
-# The callback for when a PUBLISH message is received from the server.
-#def on_message(client, userdata, msg):
-#    print(msg.topic+" "+str(msg.payload))
-    
 client = mqtt.Client(CLIENT_NAME)
 client.on_connect = on_connect
-#client.on_message = on_message
+client.on_message = on_message
 #client.on_disconnect = on_disconnect
 #client.on_publish = on_publish
 
 client.connect(BROKER_ADDRESS, PORT_NUMBER)
-#client.loop_start()
 
-#while not client.connected_flag:
-#    print("No Client connected...")
-#    time.sleep(1)
 time.sleep(2)
 
 while True:
+    client.subscribe(nrf_out_topic, 2)
+    nrf_msg = list(STR)
+    while len(nrf_msg) < 32:
+        nrf_msg.append(0)
+#    radio.write(nrf_msg)
+#    print("TRANSMIT: " + STR)
     start = time.time()
-    radio.write(message)
+    radio.write(nrf_msg)
 #DEBUG    print("Sent the message: {}".format(message))
     radio.startListening()
 
@@ -109,14 +113,6 @@ while True:
         if (n >= 32 and n <= 126):
             string += chr(n)
 
-#DEBUG    print("Publishing: {}".format(string))
-#DEBUG        try:
-#DEBUG            print(string[0])
-#DEBUG        except:
-#DEBUG            print("Packet Invalid!")
-            
-#DEBUG    print(len(string))
-
 ############# FORWARDING DATA FROM NRF ##############
     try:
         if string[0] == NRF:
@@ -127,7 +123,8 @@ while True:
 #           print("Out received message decodes to: {}".format(string))
             print("NRF TX (rpi_gateway/nrf): {}".format(string))
 #            print("Message received from NRF24L01 Node: {}".format(string)+" . . . . . . Publishing it to topic rpi_gateway/nrf/incoming")
-            client.publish(topic_name, string, 1)
+            client.publish(topic_name, string, 2)
+            
 #            client.publish("rpi_gateway/nrf/incoming", string, 1)
             client.loop(2, 10)
             topic_name = "rpi_gateway/";

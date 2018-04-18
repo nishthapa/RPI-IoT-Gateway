@@ -37,37 +37,32 @@ void loop(void)
   /****************************************************/
   
   radio.startListening();
-  Serial.println("Starting loop. Radio on.");
   char receivedMessage[32] = {0};
   if(radio.available())
   {
     radio.read(receivedMessage, sizeof(receivedMessage));
-    Serial.println(receivedMessage);
-    Serial.println("Turning off the radio.");
     radio.stopListening();
 
     String stringMessage(receivedMessage);
-
-    if(stringMessage == "GETSTRING")
-    {
-      Serial.println("Looks like they want a string!");
       
-      /*************************Framing the final packet ************************************/
-      final_message = String(DEV_ADDR) + " MESSAGE FROM NRF " + String(DEST_ADDR);
-      /**************************************************************************************/
+    /*************************Framing the final packet ************************************/
+    final_message = String(DEV_ADDR) + " MESSAGE FROM NRF " + String(DEST_ADDR);
+    /**************************************************************************************/
 
-      final_msg_length = final_message.length();
-      Serial.println(final_msg_length);
-      final_msg_length += 1;
-      //const char text[] = "SOURCE_ADDR Yo wassup, haha" + String(DEST_ADDR);
-      const char text[final_msg_length];
-      final_message.toCharArray(text, final_msg_length);
-      radio.write(text, sizeof(text));
-      Serial.println("We sent our message.");
-      final_message = "";
-      stringMessage = "";
-//      receivedMessage = "";
-    }
+    final_msg_length = final_message.length();
+    Serial.print("TX: ");
+    Serial.print(final_message);
+    Serial.print("\tRX: ");
+    Serial.print(receivedMessage);
+    Serial.print("\n");
+    final_msg_length += 1;
+    //const char text[] = "SOURCE_ADDR Yo wassup, haha" + String(DEST_ADDR);
+    const char text[final_msg_length];
+    final_message.toCharArray(text, final_msg_length);
+    radio.write(text, sizeof(text));
+    final_message = "";
+    stringMessage = "";
+//  receivedMessage = "";
   }
   delay(100);
 }
