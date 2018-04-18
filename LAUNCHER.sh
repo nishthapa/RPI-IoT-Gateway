@@ -11,8 +11,7 @@ sleep 1
 
 
 #.......... STARTING UP TEST MODULE 1 ...........#
-pushd ..
-pushd TEST
+pushd ../TEST
 lxterminal -e python TEST_PUB_1.py
 sleep 1
 #................................................#
@@ -26,9 +25,9 @@ sleep 1
 
 
 
-#........ STARTING UP MASTER SUBSCRIBER .........#
-pushd ../MASTER_SUBS
-lxterminal -e python MASTER_SUB.py
+#........ STARTING UP TOPIC DISTRIBUTER .........#
+pushd ../TOPIC_DISTRIBUTER
+lxterminal -e python TOPIC_DISTRIBUTER.py
 sleep 1
 #................................................#
 

@@ -34,6 +34,10 @@ PORT_NUMBER = 1883
 TIMEOUT_DURATION = 60
 CONNECTED_FLAG = False
 
+pkt_no = 0
+
+rx_msg = ""
+
 ########### NRF UTILITIES ##############
 radio = NRF24(GPIO, spidev.SpiDev())
 radio.begin(0, 17)
@@ -47,7 +51,7 @@ radio.enableAckPayload()
 radio.openWritingPipe(nrf_pipes[0])
 radio.openReadingPipe(1, nrf_pipes[1])
 radio.printDetails()
-nrf_msg = list("FUCKTARD")
+#nrf_msg = list("FUCKTARD")
 #nrf_msg = list(received)
 #######################################
 
@@ -65,7 +69,8 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, message):
     global STR
     STR = message.payload
-    print ("Message received: "  + STR)
+#    print("Message received: "  + STR)
+#    print("TX: " +  )
     
 #def on_publish(client, userdata, mid)
 #    print("In on_pub callback mid = "+str(mid))
@@ -116,12 +121,14 @@ while True:
 ############# FORWARDING DATA FROM NRF ##############
     try:
         if string[0] == NRF:
+            global pkt_no
+            pkt_no = pkt_no + 1
 #            if True:
 #            print("Message received fromm NRF Node");
 #            topic_name = topic_name + "nrf/incoming";
             topic_name = topic_name + "nrf";
 #           print("Out received message decodes to: {}".format(string))
-            print("NRF TX (rpi_gateway/nrf): {}".format(string))
+            print("NRF ---> PKT-NO: {}  ||  ".format(pkt_no) + "TX: {}".format(STR) + "  ||  RX: {}\n".format(string))
 #            print("Message received from NRF24L01 Node: {}".format(string)+" . . . . . . Publishing it to topic rpi_gateway/nrf/incoming")
             client.publish(topic_name, string, 2)
             
