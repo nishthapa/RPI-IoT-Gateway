@@ -7,6 +7,12 @@ TS1_ADDR = 3
 TS2_ADDR = 4
 BTH_ADDR = 5
 
+NRF_STR = "NRF"
+ESP_STR = "ESP"
+TS1_STR = "TS1"
+TS2_STR = "TS2"
+BTH_STR = "BTH"
+
 SRC_ADDR_INDEX = 0
 DEST_ADDR_INDEX = 19
 
@@ -35,40 +41,44 @@ bth_out_topic = "rpi_gateway/bth_outgoing"
 
 
 def route_packet(SRC_ADDR, USR_MSG, DEST_ADDR):
-
-################## ROUTING PACKET TO NRF24L01 #########################
-    #print("I am Reachable :-)")
     
-    #print(DST_ADDR)
+    SRC_STR = ""
+    
+    if SRC_ADDR == NRF_ADDR:
+        SRC_STR = NRF_STR
+        
+    elif SRC_ADDR == ESP_ADDR:
+        SRC_STR = ESP_STR
+        
+    elif SRC_ADDR == TS1_ADDR:
+        SRC_STR = TS1_STR
+        
+    elif SRC_ADDR == TS2_ADDR:
+        SRC_STR = TS2_STR
+        
+    elif SRC_ADDR == BTH_ADDR:
+        SRC_STR = BTH_STR
 
-    if DEST_ADDR == NRF_ADDR:
-        print("PKT-NO: {}  ||  ".format(pkt_no) + "SOURCE: {}  ||  " .format(SRC_ADDR) +"DATA: {}  ||  ".format(USR_MSG) + "DESTINATION: NRF ({})\n" .format(NRF_ADDR))
-        #print("DEST: NRF ({})" .format(NRF_ADDR))
+    if DEST_ADDR == NRF_ADDR: # ROUTING PACKET TO NRF24L01 #
+        print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: NRF ({})\n".format(NRF_ADDR))
         client.publish(nrf_out_topic, USR_MSG, 2)
-
-#######################################################################
     
     elif DEST_ADDR == ESP_ADDR:
-        print("PKT-NO: {}  ||  ".format(pkt_no) + "SOURCE: {}  ||  " .format(SRC_ADDR) +"DATA: {}  ||  ".format(USR_MSG) + "DESTINATION: ESP ({})\n" .format(ESP_ADDR))
-        #print("DEST: NRF ({})" .format(NRF_ADDR))
+        print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: ESP ({})\n".format(ESP_ADDR))
         client.publish(esp_out_topic, USR_MSG, 2)
     
     elif DEST_ADDR == BTH_ADDR:
-        print("PKT-NO: {}  ||  ".format(pkt_no) + "SOURCE: {}  ||  " .format(SRC_ADDR) +"DATA: {}  ||  ".format(USR_MSG) + "DESTINATION: BTH ({})\n" .format(BTH_ADDR))
-        #print("DEST: NRF ({})" .format(NRF_ADDR))
+        print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: BTH ({})\n".format(BTH_ADDR))
         client.publish(bth_out_topic, USR_MSG, 2)
     
     elif DEST_ADDR == TS1_ADDR:   
-        print("PKT-NO: {}  ||  ".format(pkt_no) + "SOURCE: {}  ||  " .format(SRC_ADDR) +"DATA: {}  ||  ".format(USR_MSG) + "DESTINATION: TS1 ({})\n" .format(TS1_ADDR))
-        #print("DEST: NRF ({})" .format(NRF_ADDR))
+        print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: TS1 ({})\n".format(TS1_ADDR))
         client.publish(ts1_out_topic, USR_MSG, 2)
     
-    
     elif DEST_ADDR == TS2_ADDR:
-        print("PKT-NO: {}  ||  ".format(pkt_no) + "SOURCE: {}  ||  " .format(SRC_ADDR) +"DATA: {}  ||  ".format(USR_MSG) + "DESTINATION: TS2 ({})\n" .format(TS2_ADDR))
-        #print("DEST: NRF ({})" .format(NRF_ADDR))
+        print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: TS2 ({})\n".format(TS2_ADDR))
         client.publish(ts2_out_topic, USR_MSG, 2)
-    
+
  
 def on_connect(client, userdata, flags, rc):
     
@@ -83,11 +93,12 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, message):
+    
     global pkt_no
     pkt_no = pkt_no + 1
     received = message.payload
     
-    if len(received) < 1:
+    if len(received) < 2:
         print("\t\t.....NETWORK IDLE.....\n")
     
     else:
@@ -102,11 +113,7 @@ def on_message(client, userdata, message):
     
         except:
             print("\n\t\t!! PACKET STRUCTURE INVALID !!")
-#    print ("Message received: "  + received)
-#    print ("SRC_ADDR: "  + SRC_ADDR_STR +", DST_ADDR: " + DST_ADDR_STR)
-#    client.publish(topic_name, received, 2)
-#    print("ROUTER: " + USR_MSG)
-
+            
     
 Connected = False   #global variable for the state of the connection
 

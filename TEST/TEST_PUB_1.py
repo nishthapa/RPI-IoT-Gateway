@@ -46,12 +46,20 @@ client.connect(BROKER_ADDRESS, PORT_NUMBER)
 time.sleep(2)
 
 while True:
+    
     try:
+        rnd = 0
         global pkt_no
         topic_name = topic_name + "ts1"
 	DEST_ADDR = random.randint(1, 4)
+	
 	if DEST_ADDR == DEV_ADDR:
-            DEST_ADDR = DEST_ADDR + 1
+            rnd = random.randint(0, 1)
+            if rnd == 0:
+                DEST_ADDR = DEST_ADDR + 1
+            elif rnd == 1:
+                DEST_ADDR = DEST_ADDR - 1
+                
         final_msg = str(DEV_ADDR) + message + str(DEST_ADDR)
         pkt_no = pkt_no + 1
 #        print("TS1 TX (rpi_gateway/test_topic_1): " + final_msg)
