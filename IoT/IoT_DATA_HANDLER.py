@@ -36,23 +36,25 @@ master_topic_name = "rpi_gateway/mastertopic"
 
 key = "2FBKOKZML6DIWAIW"  # Thingspeak channel to update
 
+headers = {"Content-typZZe": "application/x-www-form-urlencoded","Accept": "text/plain"}
+conn = httplib.HTTPConnection("api.thingspeak.com:80")
+
 #Report Raspberry Pi internal temperature to Thingspeak Channel
 def Upload_IoT_Data(SRC_ADDR, USR_MSG, DEST_ADDR):
-    
+    global headers, conn
     params = urllib.urlencode({"field1": USR_MSG, "status": USR_MSG, "key": key })
-    headers = {"Content-typZZe": "application/x-www-form-urlencoded","Accept": "text/plain"}
-    conn = httplib.HTTPConnection("api.thingspeak.com:80")
+    #headers = {"Content-typZZe": "application/x-www-form-urlencoded","Accept": "text/plain"}
+    #conn = httplib.HTTPConnection("api.thingspeak.com:80")
     
-    #try:
-    conn.request("POST", "/update", params, headers)
-    response = conn.getresponse()
-    print "{}" .format(USR_MSG) + "\t[SUCCESSFULLY UPLOADED TO THINGSPEAK IoT CLOUD]: " + "{}". format(response.status)
-    #print response.status, response.reason
-    data = response.read()
-    conn.close()
+    try:
+        conn.request("POST", "/update", params, headers)
+        response = conn.getresponse()
+        print "{}" .format(USR_MSG) + "\t[DATA UPLOAD TO IoT CLOUD SUCCESSFUL]: " + "{}". format(response.status)
+        data = response.read()
+        #conn.close()
         
-    #except:
-        #print "connection failed"
+    except:
+        print "connection failed"
 
 def on_connect(client, userdata, flags, rc):
     
@@ -76,16 +78,16 @@ def on_message(client, userdata, message):
         print("\t\t.....NETWORK IDLE.....\n")
     
     else:
-        #try:
-        SRC_ADDR_STR = received[SRC_ADDR_INDEX]
-        DEST_ADDR_STR = received[DEST_ADDR_INDEX]
-        SRC_ADDR = int(SRC_ADDR_STR)
-        DEST_ADDR = int(DEST_ADDR_STR)
-        USR_MSG = received[MSG_BEGIN_INDEX: MSG_END_INDEX]
-        Upload_IoT_Data(SRC_ADDR, USR_MSG, DEST_ADDR)
+        try:
+            SRC_ADDR_STR = received[SRC_ADDR_INDEX]
+            DEST_ADDR_STR = received[DEST_ADDR_INDEX]
+            SRC_ADDR = int(SRC_ADDR_STR)
+            DEST_ADDR = int(DEST_ADDR_STR)
+            USR_MSG = received[MSG_BEGIN_INDEX: MSG_END_INDEX]
+            Upload_IoT_Data(SRC_ADDR, USR_MSG, DEST_ADDR)
     
-        #except:
-            #print("\n\t\t!! PACKET STRUCTURE INVALID !!")
+        except:
+            print("\n\t\t!! PACKET STRUCTURE INVALID !!")
             
     
 Connected = False   #global variable for the state of the connection
