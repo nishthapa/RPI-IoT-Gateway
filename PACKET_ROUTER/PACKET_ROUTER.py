@@ -67,9 +67,6 @@ def route_packet(SRC_ADDR, USR_MSG, DEST_ADDR):
         print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: ESP ({})\n".format(ESP_ADDR))
         client.publish(esp_out_topic, USR_MSG, 2)
     
-    elif DEST_ADDR == BTH_ADDR:
-        print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: BTH ({})\n".format(BTH_ADDR))
-        client.publish(bth_out_topic, USR_MSG, 2)
     
     elif DEST_ADDR == TS1_ADDR:   
         print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: TS1 ({})\n".format(TS1_ADDR))
@@ -78,6 +75,10 @@ def route_packet(SRC_ADDR, USR_MSG, DEST_ADDR):
     elif DEST_ADDR == TS2_ADDR:
         print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: TS2 ({})\n".format(TS2_ADDR))
         client.publish(ts2_out_topic, USR_MSG, 2)
+        
+    elif DEST_ADDR == BTH_ADDR:
+        print("PKT-NO: {} || ".format(pkt_no) + "SOURCE: {}".format(SRC_STR) + " ({}) || ".format(SRC_ADDR) + "DATA: {} || ".format(USR_MSG) + "DESTINATION: BTH ({})\n".format(BTH_ADDR))
+        client.publish(bth_out_topic, USR_MSG, 2)
 
  
 def on_connect(client, userdata, flags, rc):

@@ -49,7 +49,7 @@ while True:
     try:
         global pkt_no
         topic_name = topic_name + "ts2"
-	DEST_ADDR = random.randint(1, 4)
+	DEST_ADDR = random.randint(1, 5)
 	if DEST_ADDR == DEV_ADDR:
             DEST_ADDR = DEST_ADDR - 1
         final_msg = str(DEV_ADDR) + message + str(DEST_ADDR)

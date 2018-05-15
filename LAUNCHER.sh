@@ -21,6 +21,14 @@ sleep 1
 #................................................#
 
 
+#......... STARTING UP BLUETOOTH MODULE .........#
+sleep 1
+pushd ../BLUETOOTH
+lxterminal -e python BTH_MQTT.py
+sleep 1
+#................................................#
+
+
 #........ STARTING UP TOPIC DISTRIBUTER .........#
 pushd ../TOPIC_DISTRIBUTER
 lxterminal -e python TOPIC_DISTRIBUTER.py

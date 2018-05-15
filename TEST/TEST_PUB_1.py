@@ -51,7 +51,7 @@ while True:
         rnd = 0
         global pkt_no
         topic_name = topic_name + "ts1"
-	DEST_ADDR = random.randint(1, 4)
+	DEST_ADDR = random.randint(1, 5)
 	
 	if DEST_ADDR == DEV_ADDR:
             rnd = random.randint(0, 1)
